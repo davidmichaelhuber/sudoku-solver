@@ -1,0 +1,9 @@
+{
+  "name": "sudoku_solver",
+  "description": "Sudoku Solver",
+  "path": "./nmh/sudoku-solver-nmh.exe",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://npilcooeeclijodbgchlpdejpmkghnej/"
+  ]
+}

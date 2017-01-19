@@ -1,0 +1,14 @@
+{
+  "name": "Sudoku Solver",
+  "description": "Sudoku Solver",
+  "version": "0.1",
+  "manifest_version": 2,
+  "app": {
+    "background": {
+      "scripts": ["js/jquery-3.0.0.min.js", "js/background.js"]
+    }
+  },
+  "permissions": [
+    "nativeMessaging"
+  ]
+}
