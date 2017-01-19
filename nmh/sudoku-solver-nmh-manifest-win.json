@@ -4,6 +4,6 @@
   "path": "./nmh/sudoku-solver-nmh.exe",
   "type": "stdio",
   "allowed_origins": [
-    "chrome-extension://npilcooeeclijodbgchlpdejpmkghnej/"
+    "chrome-extension://fgkacobecbnglockejpphcpefiahacko/"
   ]
 }
