@@ -28,5 +28,5 @@ function onDisconnected() {
 
 function send() {
 	console.log("Sending");
-	port.postMessage({text: "next_step"});
+	port.postMessage({text: "136259748725418936489367150364780219518692374972134685240576893853921467697840520"});
 }
