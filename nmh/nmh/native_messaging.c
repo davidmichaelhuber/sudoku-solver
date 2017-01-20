@@ -7,13 +7,28 @@
 #include "solver.h"
 #include "native_messaging.h"
 
+void exit_if_app_is_offline()
+{
+	fseek (stdin, 0, SEEK_END);
+	int num = ftell(stdin);
+
+	if (num <= 0)
+	{
+		exit(0);
+	}
+}
+
 void read_native_message_tick()
 {
 	char bInLen[4];
 	read(0, bInLen, 4);
+
+	exit_if_app_is_offline();
+
 	unsigned int inLen = *(unsigned int *)bInLen;
 	char *inMsg = (char *)malloc(inLen);
 	read(0, inMsg, inLen);
+
 	free(inMsg);
 }
 
@@ -21,6 +36,9 @@ int* read_native_message_sudoku()
 {
 	char bInLen[4];
 	read(0, bInLen, 4);
+
+	exit_if_app_is_offline();
+
 	unsigned int inLen = *(unsigned int *)bInLen;
 	char *inMsg = (char *)malloc(inLen);
 	read(0, inMsg, inLen);
@@ -62,5 +80,6 @@ void write_native_message(char* text)
 	write(1, bOutLen, 4);
 	write(1, msg, outLen);
 	fflush(stdout);
+	free(text);
 	free(msg);
 }

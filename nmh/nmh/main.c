@@ -8,6 +8,10 @@
 
 int main()
 {
-	sudoku_solve(read_native_message_sudoku());
+	while(1)
+	{
+		sudoku_solve(read_native_message_sudoku());		
+	}
+
 	return 0;
 }

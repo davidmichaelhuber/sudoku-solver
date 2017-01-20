@@ -43,7 +43,7 @@ void sudoku_solve_backtracking(int sudoku[], int field)
 					if (!solution_found)
 					{
 						solution_found = true;
-						write_native_message("Solution found");	
+						write_native_message("Solution found");
 					}
 				}
 
