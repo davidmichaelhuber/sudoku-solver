@@ -28,7 +28,7 @@ void sudoku_solve_backtracking(int sudoku[], int field)
 		{
 			if (!solution_found)
 			{
-				read_native_message();
+				read_native_message_tick();
 				write_native_message(get_current_sudoku(sudoku, field, val));
 			}
 			

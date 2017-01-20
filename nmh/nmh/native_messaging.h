@@ -1,8 +1,11 @@
 #ifndef NATIVE_MESSAGING_H_
 #define NATIVE_MESSAGING_H_
 
-void read_native_message();
+void read_native_message_tick();
+
+int* read_native_message_sudoku();
 
 void write_native_message(char* text);
+
 
 #endif /* NATIVE_MESSAGING_H_ */
