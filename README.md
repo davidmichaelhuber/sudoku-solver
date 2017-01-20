@@ -4,11 +4,11 @@
 
 Windows:
 ```
-cd ./nmh/nmh
+cd nmh/nmh
 mingw32-make
 ```
 OS X:
 ```
-cd ./nmh/nmh
+cd nmh/nmh
 make
 ```
