@@ -12,8 +12,8 @@ _Bool solution_found;
 void sudoku_solve(int sudoku[])
 {
 	sudoku_solve_backtracking(sudoku, 0);
+	free(sudoku);
 	solution_found = false;
-	write_native_message("Ready for next sudoku");
 }
 
 void sudoku_solve_backtracking(int sudoku[], int field)
@@ -28,7 +28,7 @@ void sudoku_solve_backtracking(int sudoku[], int field)
 		{
 			if (!solution_found)
 			{
-				write_native_message(get_current_sudoku(sudoku, field, val));
+				write_native_message("unsolved", get_current_sudoku(sudoku, field, val));
 				read_native_message_tick();
 			}
 			
@@ -39,12 +39,9 @@ void sudoku_solve_backtracking(int sudoku[], int field)
 
 				/* Check if sudoku is completely solved */
 				if (field >= (GRID * GRID) - 1)
-				{	
-					if (!solution_found)
-					{
-						solution_found = true;
-						write_native_message("Solution found");
-					}
+				{
+					solution_found = true;
+					write_native_message("solved", get_current_sudoku(sudoku, field, val));
 				}
 
 				/* Keep on solving */

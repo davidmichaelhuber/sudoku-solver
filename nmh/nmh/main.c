@@ -10,7 +10,8 @@ int main()
 {
 	while(1)
 	{
-		sudoku_solve(read_native_message_sudoku());		
+		write_native_message("status", "ready");
+		sudoku_solve(read_native_message_sudoku());
 	}
 
 	return 0;

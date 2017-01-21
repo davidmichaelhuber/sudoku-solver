@@ -44,7 +44,7 @@ int* read_native_message_sudoku()
 	read(0, inMsg, inLen);
 
 	char text[GRID * GRID];
-	memcpy(text, &inMsg[9], GRID * GRID);
+	memcpy(text, &inMsg[11], GRID * GRID);
 	text[GRID * GRID] = '\0';
 
 	free(inMsg);
@@ -61,17 +61,29 @@ int* read_native_message_sudoku()
 	return sudoku;
 }
 
-void write_native_message(char* text)
+void write_native_message(char* key, char* val)
 {
-	char* json_pre = "{\"text\":\"";
-	char* json_post = "\"}";
+	char* json_pre_key = "{\"";
+	char* json_post_key = "\":\"";
+	char* json_end = "\"}";
 
-	size_t msg_length = ((sizeof(char)) * (strlen(json_pre) + strlen(text) + strlen(json_post))) + (sizeof(char));
+	size_t msg_length = ((sizeof(char)) * 
+												(
+													strlen(json_pre_key) + 
+													strlen(key) +
+													strlen(json_post_key) +
+													strlen(val) + 
+													strlen(json_end)
+												)) + (sizeof(char)
+											);
+
 	char* msg = malloc(msg_length);
 
-	strcpy(msg, json_pre);
-	strcat(msg, text);
-	strcat(msg, json_post);
+	strcpy(msg, json_pre_key);
+	strcat(msg, key);
+	strcat(msg, json_post_key);
+	strcat(msg, val);
+	strcat(msg, json_end);
 
 	msg[msg_length - 1] = '\0';
 
@@ -80,6 +92,7 @@ void write_native_message(char* text)
 	write(1, bOutLen, 4);
 	write(1, msg, outLen);
 	fflush(stdout);
-	free(text);
+	free(key);
+	free(val);
 	free(msg);
 }
