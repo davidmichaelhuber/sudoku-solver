@@ -4,8 +4,20 @@
 /* 9x9 Sudoku Grid */
 #define GRID 9
 
+typedef struct
+{
+	int* sudoku;
+	int skip_msg_count;
+} SetupData;
+
 /* Holds the solution status of the current sudoku */
 extern _Bool solution_found;
+
+/* Holds the solution status of the current sudoku */
+extern int solution_count;
+
+/* Holds the solution status of the current sudoku */
+extern int skip_solution_count;
 
 /* Returns the solution for a given sudoku */
 void sudoku_solve(int sudoku[]);

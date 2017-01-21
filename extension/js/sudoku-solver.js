@@ -17,7 +17,7 @@ function connect() {
 }
 
 function onNativeMessage(message) {
-  console.log("Received");
+  // console.log("Received");
   console.log(JSON.stringify(message));
 }
 
@@ -27,6 +27,9 @@ function onDisconnected() {
 }
 
 function send() {
-	console.log("Sending");
-	port.postMessage({text: "136259748725418936489367150364780219518692374972134685240576893853921467697840520"});
+	// console.log("Sending");
+  /* Easy
+	port.postMessage({sudoku: "136259748725418936489367150364780219518692374972134685240576893853921467697840520"}); */
+  /* Hard */
+  port.postMessage({sudoku: "002060000006000700010003004000601005090005000007000800050070400100000003200000100"});
 }

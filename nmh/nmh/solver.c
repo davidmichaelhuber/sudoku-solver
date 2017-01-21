@@ -8,9 +8,13 @@
 #include "native_messaging.h"
 
 _Bool solution_found;
+int solution_count;
+int skip_solution_count;
 
 void sudoku_solve(int sudoku[])
 {
+	solution_count = 0;
+	skip_solution_count = 100000;
 	sudoku_solve_backtracking(sudoku, 0);
 	free(sudoku);
 	solution_found = false;
@@ -26,7 +30,8 @@ void sudoku_solve_backtracking(int sudoku[], int field)
 		/* Loop through all possible values for sudoku[field] */
 		for (val = 1; val <= GRID; val++)
 		{
-			if (!solution_found)
+			solution_count++;
+			if (!solution_found && skip_solution_count != 1 && (solution_count % skip_solution_count == 0))
 			{
 				write_native_message("unsolved", get_current_sudoku(sudoku, field, val));
 				read_native_message_tick();
@@ -42,6 +47,9 @@ void sudoku_solve_backtracking(int sudoku[], int field)
 				{
 					solution_found = true;
 					write_native_message("solved", get_current_sudoku(sudoku, field, val));
+					char tries[sizeof(int)];
+					sprintf(tries, "%d", solution_count);
+					write_native_message("tries", tries);
 				}
 
 				/* Keep on solving */
