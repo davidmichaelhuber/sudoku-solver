@@ -7,8 +7,35 @@
 #include "solver.h"
 #include "native_messaging.h"
 
+/* Solves a given sudoku and sends the partial solution(s), solved solution(s)
+and solution tries to the Chrome Native Messaging application */
+void sudoku_solve_backtracking(int sudoku[], int field);
+
+/* Returns true if a given partial solution fits at a given place */
+_Bool partial_solution_fits(int sudoku[], int val, int field);
+
+/* Converts a given field to a certain column and row */
+void field_to_coords(int field, int *col, int *row);
+
+/* Returns a field calculated by the given column and row */
+int choords_to_field(int col, int row);
+
+/* Converts given column and row to a certain box column and box row */
+void coords_to_box_coords(int col, int row, int *box_col, int *box_row);
+
+/* Returns the first field of the given box coords */
+int first_field_of_box_coords(int box_col, int box_row);
+
+/* Returns a string representing a given sudoku with val in sudoku[field] */
+char* get_current_sudoku(int sudoku[], int field, int val);
+
+/* Holds the number of solutions found */
 unsigned int solution_count;
+
+/* Holds the number of solutions that should not be sent */
 unsigned int skip_solution_count;
+
+/* Holds the solution status of the current sudoku */
 _Bool solution_found;
 
 void sudoku_solve(SetupData *data)
@@ -35,7 +62,7 @@ void sudoku_solve_backtracking(int sudoku[], int field)
       if (!solution_found && skip_solution_count != 1 && (solution_count % skip_solution_count == 0))
       {
         write_native_message("unsolved", get_current_sudoku(sudoku, field, val));
-        read_native_message_tick();
+        get_tick();
       }
       
       if (partial_solution_fits(sudoku, val, field))
@@ -141,22 +168,6 @@ void coords_to_box_coords(int col, int row, int *box_col, int *box_row)
 int first_field_of_box_coords(int box_col, int box_row)
 {
   return (GRID * 3 * (box_row - 1)) + (box_col - 1) * 3;
-}
-
-void print_sudoku(int sudoku[])
-{
-  int i;
-  for (i = 0; i < (GRID * GRID); i++)
-  {
-    if (i != 0 && i % GRID == 0)
-      printf("\n");
-    if (i != 0 && i % 3 == 0 && i % 9 != 0)
-      printf("║ ");
-    if (i != 0 && i % 27 == 0)
-      printf("══════╬═══════╬══════\n");
-    printf("%d ", sudoku[i]);
-  }
-  printf("\n");
 }
 
 char* get_current_sudoku(int sudoku[], int field, int val)

@@ -7,7 +7,7 @@ $("#send-sudoku-button").click(function(){
 });
 
 $("#send-skip-solution-count-button").click(function(){
-  send({skip_solution_count: "100000"});
+  send({skip_solution_count: "1"});
 });
 
 $("#send-tick-button").click(function(){
