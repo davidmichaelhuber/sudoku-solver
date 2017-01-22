@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdbool.h>
+#include <inttypes.h>
 
 #include "solver.h"
 #include "native_messaging.h"
@@ -32,6 +33,33 @@ void read_native_message_tick()
 	free(inMsg);
 }
 
+void parse_json(char* json, char** key, char** val)
+{
+	char* json_pre_key = "{\"";
+	char* json_post_key = "\":\"";
+	char* json_end = "\"}";
+
+	char *temp = strstr(json, json_pre_key);
+	int index_key_start = (temp - json) + (int)strlen(json_pre_key);
+	temp = strstr(json, json_post_key);
+	int index_key_end = temp - json;
+	int index_val_start = index_key_end + (int)strlen(json_post_key);
+	temp = strstr(json, json_end);
+	int index_val_end = temp - json;
+
+	size_t key_length = (size_t)(index_key_end - index_key_start);
+	size_t val_length = (size_t)(index_val_end - index_val_start);
+
+	*key = malloc((sizeof(char) * key_length) + sizeof(char));
+	*val = malloc((sizeof(char) * val_length) + sizeof(char));
+
+	memcpy(*key, &json[index_key_start], key_length);
+	memcpy(*val, &json[index_val_start], val_length);
+
+	(*key)[key_length] = '\0';
+	(*val)[val_length] = '\0';
+}
+
 int* read_native_message_sudoku()
 {
 	char bInLen[4];
@@ -43,11 +71,10 @@ int* read_native_message_sudoku()
 	char *inMsg = (char *)malloc(inLen);
 	read(0, inMsg, inLen);
 
-	char text[GRID * GRID];
-	memcpy(text, &inMsg[11], GRID * GRID);
-	text[GRID * GRID] = '\0';
+	char* key;
+	char* val;
 
-	free(inMsg);
+	parse_json(inMsg, &key, &val);
 
 	unsigned int i;
 	unsigned int fields = GRID * GRID;
@@ -55,10 +82,50 @@ int* read_native_message_sudoku()
 
 	for (i = 0; i < fields; i++)
 	{
-		sudoku[i] = text[i] - '0';
+		sudoku[i] = val[i] - '0';
 	}
 
+	free(inMsg);
+	free(key);
+	free(val);
+
 	return sudoku;
+}
+
+unsigned int read_native_message_skip_solution_count()
+{
+	unsigned int skip_solution_count;
+
+	char bInLen[4];
+	read(0, bInLen, 4);
+
+	exit_if_app_is_offline();
+
+	unsigned int inLen = *(unsigned int *)bInLen;
+	char *inMsg = (char *)malloc(inLen);
+	read(0, inMsg, inLen);
+
+	char* key;
+	char* val;
+
+	parse_json(inMsg, &key, &val);
+
+	skip_solution_count = (unsigned int)strtoumax(val, NULL, 10);
+
+	free(inMsg);
+	free(key);
+	free(val);
+
+	return skip_solution_count;
+}
+
+SetupData *read_native_message_setup_data()
+{
+	SetupData *data = malloc(sizeof(SetupData));
+	data->sudoku = read_native_message_sudoku();
+	data->skip_solution_count = read_native_message_skip_solution_count();
+
+	return data;
 }
 
 void write_native_message(char* key, char* val)
@@ -92,6 +159,7 @@ void write_native_message(char* key, char* val)
 	write(1, bOutLen, 4);
 	write(1, msg, outLen);
 	fflush(stdout);
+
 	free(key);
 	free(val);
 	free(msg);

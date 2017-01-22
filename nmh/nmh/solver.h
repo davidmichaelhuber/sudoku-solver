@@ -7,20 +7,18 @@
 typedef struct
 {
 	int* sudoku;
-	int skip_msg_count;
+	unsigned int skip_solution_count;
 } SetupData;
+
+extern unsigned int solution_count;
+
+extern unsigned int skip_solution_count;
 
 /* Holds the solution status of the current sudoku */
 extern _Bool solution_found;
 
-/* Holds the solution status of the current sudoku */
-extern int solution_count;
-
-/* Holds the solution status of the current sudoku */
-extern int skip_solution_count;
-
 /* Returns the solution for a given sudoku */
-void sudoku_solve(int sudoku[]);
+void sudoku_solve(SetupData *data);
 
 /* Finds the solution for a given sudoku with backtracking */
 void sudoku_solve_backtracking(int sudoku[], int field);

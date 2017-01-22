@@ -7,16 +7,17 @@
 #include "solver.h"
 #include "native_messaging.h"
 
+unsigned int solution_count;
+unsigned int skip_solution_count;
 _Bool solution_found;
-int solution_count;
-int skip_solution_count;
 
-void sudoku_solve(int sudoku[])
+void sudoku_solve(SetupData *data)
 {
 	solution_count = 0;
-	skip_solution_count = 100000;
-	sudoku_solve_backtracking(sudoku, 0);
-	free(sudoku);
+	skip_solution_count = data->skip_solution_count;
+	sudoku_solve_backtracking(data->sudoku, 0);
+	free(data->sudoku);
+	free(data);
 	solution_found = false;
 }
 
@@ -162,9 +163,7 @@ char* get_current_sudoku(int sudoku[], int field, int val)
 {
 	int i;
 	int temp = sudoku[field];
-	size_t str_length = (sizeof(char) * GRID * GRID) + 1;
-	/* number_count + 1 for terminating null */
-	char* buffer = malloc(str_length);
+	char* buffer = malloc((sizeof(char) * GRID * GRID) + sizeof(char));
 
 	sudoku[field] = val;
 
@@ -173,7 +172,7 @@ char* get_current_sudoku(int sudoku[], int field, int val)
 		buffer[i] = (char)(sudoku[i] + '0');
 	}
 
-	buffer[str_length - 1] = '\0';
+	buffer[GRID * GRID] = '\0';
 
 	sudoku[field] = temp;
 
