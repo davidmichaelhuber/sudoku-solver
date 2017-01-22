@@ -6,8 +6,8 @@
 
 typedef struct
 {
-	int* sudoku;
-	unsigned int skip_solution_count;
+  int* sudoku;
+  unsigned int skip_solution_count;
 } SetupData;
 
 extern unsigned int solution_count;
