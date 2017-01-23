@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdbool.h>
+#include <math.h>
 
 #include "solver.h"
 #include "native_messaging.h"
@@ -64,7 +65,7 @@ void sudoku_solve_backtracking(int sudoku[], int field)
         write_native_message("unsolved", get_current_sudoku(sudoku, field, val));
         get_tick();
       }
-      
+
       if (partial_solution_fits(sudoku, val, field))
       {
         /* Set partial solution */
@@ -75,9 +76,12 @@ void sudoku_solve_backtracking(int sudoku[], int field)
         {
           solution_found = true;
           write_native_message("solved", get_current_sudoku(sudoku, field, val));
-          char tries[sizeof(int)];
+
+          /* Calculates the length of an integer */
+          char *tries = malloc((size_t)floor(log10(abs((int)solution_count))) + 1 * sizeof(char));
           sprintf(tries, "%d", solution_count);
           write_native_message("tries", tries);
+          free(tries);
         }
 
         /* Keep on solving */
@@ -128,7 +132,7 @@ _Bool partial_solution_fits(int sudoku[], int val, int field)
         return false;
       }
     }
-  } 
+  }
 
   return true;
 }

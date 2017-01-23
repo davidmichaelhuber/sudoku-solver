@@ -1,3 +1,14 @@
+#ifdef _WIN32
+  #define OS 1
+  #ifdef _WIN64
+    #define OS 1
+  #endif
+#elif __APPLE__
+  #define OS 2
+#else
+  #define OS 0
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -31,7 +42,7 @@ void exit_if_app_is_offline();
 /* Parses a given json string by extracting the key and value. Due to JSON
 strings are used like a key-value pairs within this context the JSON strings
 sent by the Chrome Native Messaging application need to have exactly one key and
-one value. Example: {"<key>":"<value>"} 
+one value. Example: {"<key>":"<value>"}
 The pointer to the JSON string is getting de-allocated within the function. */
 void parse_json(char* json, char** key, char** val);
 
@@ -57,12 +68,12 @@ void write_native_message(char* key, char* val)
   char* json_post_key = "\":\"";
   char* json_end = "\"}";
 
-  size_t msg_length = ((sizeof(char)) * 
+  size_t msg_length = ((sizeof(char)) *
                         (
-                          strlen(json_pre_key) + 
+                          strlen(json_pre_key) +
                           strlen(key) +
                           strlen(json_post_key) +
-                          strlen(val) + 
+                          strlen(val) +
                           strlen(json_end)
                         )) + (sizeof(char)
                       );
@@ -83,8 +94,6 @@ void write_native_message(char* key, char* val)
   write(1, msg, outLen);
   fflush(stdout);
 
-  free(key);
-  free(val);
   free(msg);
 }
 
@@ -141,12 +150,21 @@ char* read_native_message()
 
 void exit_if_app_is_offline()
 {
-  fseek (stdin, 0, SEEK_END);
-  int num = ftell(stdin);
-
-  if (num <= 0)
+  switch (OS)
   {
-    exit(0);
+    /* No OS detected */
+    case 0:
+      exit(0);
+    /* Windows */
+    case 1:
+      fseek(stdin, 0, SEEK_END);
+      if (ftell(stdin) <= 0) exit(0);
+      break;
+    /* OS X, closes the nmh automatically after closing the app */
+    /*
+    case 2:
+      break;
+    */
   }
 }
 
