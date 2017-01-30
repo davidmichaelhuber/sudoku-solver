@@ -1,33 +1,32 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>
-      canvas {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
-    </style>
+    <link rel="stylesheet" href="../css/style.css">
   </head>
   <body>
-    <button id='connect-button'>Connect</button>
-    <button id='send-sudoku-button'>Send Sudoku</button>
-    <button id='send-skip-solution-count-button'>Send Skip Solution Count</button>
-    <button id='send-tick-button'>Send Tick</button>
-    <canvas id="sudoku-solver-canvas"></canvas>
+    <div id="canvas-wrapper">
+      <div id="controls-wrapper">
+        <button id='pick-sudoku-button'
+                data-sudoku-fields='002060000006000700010003004000601005090005000007000800050070400100000003200000100'
+                data-skip-solution-count='100000'>
+          Send Sudoku
+        </button>
+      </div>
+      <canvas id="sudoku-solver-canvas"></canvas>
+    </div>
 
-    <!-- Libraries -->
+    <!-- Libraries
     <script src="../libs/jquery-3.0.0.min.js" type="text/javascript"></script>
+    -->
 
     <!-- Prototypes -->
     <script src="../js/AssetManager.js" type="text/javascript"></script>
     <script src="../js/Drawer.js" type="text/javascript"></script>
     <script src="../js/NMHListener.js" type="text/javascript"></script>
     <script src="../js/Particle.js" type="text/javascript"></script>
-    <script src="../js/ParticleSudoku.js" type="text/javascript"></script>
     <script src="../js/Settings.js" type="text/javascript"></script>
     <script src="../js/Sudoku.js" type="text/javascript"></script>
+    <script src="../js/SudokuStorage.js" type="text/javascript"></script>
     <script src="../js/UI.js" type="text/javascript"></script>
 
     <!-- Entry Point -->

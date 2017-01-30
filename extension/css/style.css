@@ -1,0 +1,19 @@
+/* Overall */
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+/* Controls */
+
+#controls-wrapper {
+  background-color:#84C9FF;
+}
+
+/* Canvas */
+
+#canvas-wrapper {
+  position: absolute;
+  min-height: 100%;
+  background-color:#6FEFA5;
+}
