@@ -15,16 +15,40 @@ var Drawer = function(sudokuStorage) {
 };
 
 Drawer.prototype.moveParticles = function() {
+  for(var i = 0; i < this.sudokuStorage.unsolvedSudokus.length; i++) {
+    for(var j = 0; j < this.sudokuStorage.unsolvedSudokus[i].particles.length; j++) {
+      var particle = this.sudokuStorage.unsolvedSudokus[i].particles[j];
+      var num = particle.val;
+      var newX = particle.x + particle.dx;
+      var newY = particle.y + particle.dy;
+      if(newX < 0) {
+        newX = Settings.get('CANVAS_WIDTH');
+      }
+      else if(newX > Settings.get('CANVAS_WIDTH')) {
+        newX = 0;
+      }
+      if(newY < 0) {
+        newY = Settings.get('CANVAS_HEIGHT');
+      }
+      else if(newY > Settings.get('CANVAS_HEIGHT')) {
+        newY = 0;
+      }
+      particle.x = newX;
+      particle.y = newY;
+    }
+  }
 }
 
 Drawer.prototype.drawParticles = function() {
   for(var i = 0; i < this.sudokuStorage.unsolvedSudokus.length; i++) {
     for(var j = 0; j < this.sudokuStorage.unsolvedSudokus[i].particles.length; j++) {
-      var num = this.sudokuStorage.unsolvedSudokus[i].particles[j].val;
+      var particle = this.sudokuStorage.unsolvedSudokus[i].particles[j];
+      var num = particle.val;
       var img = this.assetManager.getAsset("../svg/numbers/" + num + ".svg");
-      this.ctx.drawImage(img, j * 15, i * 30, 12, 21);
+      this.ctx.drawImage(img, particle.x, particle.y, 12, 21);
     }
   }
+  /*
   for(var i = 0; i < this.sudokuStorage.solvedSudokus.length; i++) {
     for(var j = 0; j < this.sudokuStorage.solvedSudokus[i].particles.length; j++) {
       var num = this.sudokuStorage.solvedSudokus[i].particles[j].val;
@@ -32,6 +56,7 @@ Drawer.prototype.drawParticles = function() {
       this.ctx.drawImage(img, j * 15, (i * 30) + 300, 12, 21);
     }
   }
+  */
 }
 
 Drawer.prototype.renderLoop = function() {
@@ -39,6 +64,10 @@ Drawer.prototype.renderLoop = function() {
   this.resizeCanvas();
   this.clearCanvas();
   this.drawParticles();
+  /* Particles should not be bound to a specific sudoku due to valeus will jump
+  around if so due to for each unsolved solution new particles get calculated.
+  TODO: Pregenerate particles and update their values when a new unsolved solution
+  was found */
   this.moveParticles();
 }
 
